@@ -100,25 +100,27 @@ class AutoCompleteSearchState extends State<AutoCompleteSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return !widget.hidden ? ChangeNotifierProvider.value(
-      value: provider,
-      child: RoundedFrame(
-        height: widget.height,
-        padding: const EdgeInsets.only(right: 10),
-        color: Theme.of(context).brightness == Brightness.dark ? Colors.black54 : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        elevation: 8.0,
-        child: Row(
-          children: <Widget>[
-            SizedBox(width: 10),
-            Icon(Icons.search),
-            SizedBox(width: 10),
-            Expanded(child: _buildSearchTextField()),
-            _buildTextClearIcon(),
-          ],
-        ),
-      ),
-    ) : Container();
+    return !widget.hidden
+        ? ChangeNotifierProvider.value(
+            value: provider,
+            child: RoundedFrame(
+              height: widget.height,
+              padding: const EdgeInsets.only(right: 10),
+              color: Theme.of(context).brightness == Brightness.dark ? Colors.black54 : Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              elevation: 8.0,
+              child: Row(
+                children: <Widget>[
+                  SizedBox(width: 10),
+                  Icon(Icons.search),
+                  SizedBox(width: 10),
+                  Expanded(child: _buildSearchTextField()),
+                  _buildTextClearIcon(),
+                ],
+              ),
+            ),
+          )
+        : Container();
   }
 
   Widget _buildSearchTextField() {
@@ -224,7 +226,7 @@ class AutoCompleteSearchState extends State<AutoCompleteSearch> {
 
     overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        top: appBarRenderBox!.size.height,
+        top: appBarRenderBox!.size.height + kToolbarHeight,
         left: screenWidth * 0.025,
         right: screenWidth * 0.025,
         child: Material(
@@ -282,7 +284,9 @@ class AutoCompleteSearchState extends State<AutoCompleteSearch> {
       final PlacesAutocompleteResponse response = await provider.places.autocomplete(
         searchTerm,
         sessionToken: widget.sessionToken,
-        location: provider.currentPosition == null ? null : Location(lat: provider.currentPosition!.latitude, lng: provider.currentPosition!.longitude),
+        location: provider.currentPosition == null
+            ? null
+            : Location(lat: provider.currentPosition!.latitude, lng: provider.currentPosition!.longitude),
         offset: widget.autocompleteOffset,
         radius: widget.autocompleteRadius,
         language: widget.autocompleteLanguage,
